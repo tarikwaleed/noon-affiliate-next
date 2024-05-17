@@ -1,12 +1,12 @@
-import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
-import { HomeIcon } from "@heroicons/react/16/solid";
 
 export default function TopBar() {
     return (
-        <header className="flex items-end justify-between px-6 py-4 bg-gray-800">
+        <header className="flex items-end justify-between h-20 shadow-lg bg-gray-100 ">
             <div></div>
-            <UserButton afterSignOutUrl="/"></UserButton>
+            <div className="p-6">
+                <UserButton afterSignOutUrl="/" ></UserButton>
+            </div>
         </header>
     );
 }

@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button"
-import { CardTitle, CardHeader, CardContent, Card, CardFooter } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
+import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card"
 import Link from "next/link"
-import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
+import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs"
 
 
 export function LandingPage() {
