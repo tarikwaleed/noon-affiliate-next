@@ -1,18 +1,32 @@
-import CouponsList from '@/components/coupons-list'
-import CreateCouponButton from '@/components/create-coupon-btn'
+"use client"
 import { Button } from '@/components/ui/button'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useUser } from "@clerk/clerk-react";
 
-type Props = {}
 
-const page = (props: Props) => {
+const page = () => {
+    const { user } = useUser();
+
+    const getCoupon = async () => {
+        const coupon = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/coupon?user_id=${user?.id}`)
+        console.log("pressed")
+        console.log(coupon)
+
+    }
+
     return (
         <div className='pt-20'>
             <div className='flex flex-row justify-center'>
-                <CreateCouponButton></CreateCouponButton>
+                <Button
+                    onClick={() => {
+                        getCoupon()
+                    }}
+                    className='text-xl'
+                >
+                    Get Coupon</Button>
             </div>
             <div className='pt-20'>
-                <CouponsList></CouponsList>
+
             </div>
         </div>
 
