@@ -20,11 +20,13 @@ To read more about using these font, please visit the Next.js documentation:
 import { Button } from "@/components/ui/button"
 import { CardHeader, CardContent, Card } from "@/components/ui/card"
 import { ResponsiveLine } from "@nivo/line"
+import { ResponsiveBar } from '@nivo/bar'
 import { ShoppingBag, DollarSign, ClipboardIcon, WalletIcon } from 'lucide-react'
 import { useEffect, useState } from "react";
-import { CouponDetails, PerformanceData } from '@/lib/types'
+import { CouponDetails } from '@/lib/types'
 import Link from "next/link";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { OrdersTable } from "./orders-table"
 export function CouponCard({ couponCode }: { couponCode: string | undefined }) {
   const [copied, setCopied] = useState<boolean>(false);
   const [couponDetails, setCouponDetails] = useState<CouponDetails | null>(null)
@@ -55,10 +57,9 @@ export function CouponCard({ couponCode }: { couponCode: string | undefined }) {
       getCouponDetails()
     }
   }, [couponCode])
-
   return (
 
-    <Card className="w-full max-w-4xl">
+    <Card className="w-full max-w-4xl  h-auto overflow-auto ">
       <CardHeader className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="bg-primary px-3 py-1 rounded-full text-white text-sm font-medium">{couponCode}</div>
@@ -69,21 +70,21 @@ export function CouponCard({ couponCode }: { couponCode: string | undefined }) {
             }}
           >
             <ClipboardIcon className="w-4 h-4" />
-            {copied ? <span>Copied</span> : <span>Copy</span>}
+            {copied ? <span>تم النسخ</span> : <span>نسخ</span>}
           </Button>
         </div>
       </CardHeader>
 
-      <CardContent className="grid gap-6">
+      <CardContent className="grid gap-6 " dir="rtl">
         {couponDetails != null ?
           <>
             <div className="flex flex-col items-center justify-center bg-green-300 p-6 rounded-lg">
-              <h2 className="text-2xl font-bold mb-2">Your Commission</h2>
-              <p className="text-8xl font-bold text-green-700">{couponDetails?.commission}</p>
+              <h2 className="text-2xl font-bold mb-2">عمولاتك</h2>
+              <p className="text-8xl font-bold text-green-700">{couponDetails?.total_commission} <span className="text-4xl text-yellow-600">SAR</span></p>
               <Link href={`https://wa.me/966543486623?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B3%D8%AD%D8%A8%20%D8%B9%D9%85%D9%88%D9%84%D8%A7%D8%AA%D9%8A%20%D9%83%D9%88%D8%AF%20%D8%A7%D9%84%D8%AE%D8%B5%D9%85%20%D8%A7%D9%84%D9%85%D9%85%D9%8A%D8%B2%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%20%D8%A8%D9%8A%20%D9%87%D9%88%20${couponCode}`}>
                 <Button className="mt-4">
                   <WalletIcon className="w-4 h-4 mr-2" />
-                  Withdraw Commission
+                  اسحب عمولاتك
                 </Button>
               </Link>
             </div>
@@ -93,7 +94,7 @@ export function CouponCard({ couponCode }: { couponCode: string | undefined }) {
                 <CardHeader>
                   <div className="flex gap-2 items-center">
                     <ShoppingBag className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    <span>Total Orders</span>
+                    <span>جميع الطلبات</span>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -108,7 +109,7 @@ export function CouponCard({ couponCode }: { couponCode: string | undefined }) {
                 <CardHeader>
                   <div className="flex gap-2 items-center">
                     <DollarSign className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    <span>Total Orders value</span>
+                    <span>قيمة جميع الطلبات</span>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -123,7 +124,7 @@ export function CouponCard({ couponCode }: { couponCode: string | undefined }) {
                 <CardHeader>
                   <div className="flex gap-2 items-center">
                     <DollarSign className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    <span>Average Order Value</span>
+                    <span>متوسط قيمة الطلب</span>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -138,18 +139,28 @@ export function CouponCard({ couponCode }: { couponCode: string | undefined }) {
             <div className="pt-20" />
             <div className="grid md:grid-cols-1 gap-6">
               <div>
-                <h4 className="text-4xl mb-4">Order Performance in the last 6 months</h4>
+                <h4 className="text-4xl mb-4">احصائيات عمولاتك مؤخرا</h4>
                 <>
 
-                  {couponDetails?.performance_data &&
-                    <div
-                      //  className="aspect-[16/9]"
-                      className="w-full h-96"
-                    >
-                      <LineChart
-                        data={couponDetails?.performance_data}
-                      />
-                    </div>
+                  {couponDetails?.commission_stats &&
+                    <>
+                      <Tabs defaultValue="stats" className="w-full h-96" dir="rtl">
+                        <TabsList>
+                          <TabsTrigger value="stats">احصائيات</TabsTrigger>
+                          <TabsTrigger value="details">تفاصيل</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="stats">
+                          <div className="w-full h-96">
+                            <BarChart
+                              data={couponDetails.commission_stats}
+                            ></BarChart>
+                          </div>
+                        </TabsContent>
+                        <TabsContent value="details">
+                          <OrdersTable couponCode={couponCode ?? ''}></OrdersTable>
+                        </TabsContent>
+                      </Tabs>
+                    </>
                   }
                 </>
               </div>
@@ -170,73 +181,119 @@ export function CouponCard({ couponCode }: { couponCode: string | undefined }) {
 
 
 
-const LineChart = ({ data }: { data: PerformanceData[] }) => (
-  <ResponsiveLine
+const BarChart = ({ data }: { data: any }) => (
+  <ResponsiveBar
     data={data}
-    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-    xScale={{ type: 'point' }}
-    yScale={{
-      type: 'linear',
-      min: 'auto',
-      max: 'auto',
-      stacked: true,
-      reverse: false
+    // keys={[
+    //   'السعوديه',
+    //   'الامارات',
+    // ]}
+    indexBy="month"
+    margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+    padding={0.3}
+    valueScale={{ type: 'linear' }}
+    indexScale={{ type: 'band', round: true }}
+    colors={{ scheme: 'nivo' }}
+    defs={[
+      {
+        id: 'dots',
+        type: 'patternDots',
+        background: 'inherit',
+        color: '#38bcb2',
+        size: 4,
+        padding: 1,
+        stagger: true
+      },
+      {
+        id: 'lines',
+        type: 'patternLines',
+        background: 'inherit',
+        color: '#eed312',
+        rotation: -45,
+        lineWidth: 6,
+        spacing: 10
+      }
+    ]}
+    fill={[
+      {
+        match: {
+          id: 'fries'
+        },
+        id: 'dots'
+      },
+      {
+        match: {
+          id: 'sandwich'
+        },
+        id: 'lines'
+      }
+    ]}
+    borderColor={{
+      from: 'color',
+      modifiers: [
+        [
+          'darker',
+          1.6
+        ]
+      ]
     }}
-    yFormat=" >-.2f"
     axisTop={null}
     axisRight={null}
     axisBottom={{
       tickSize: 5,
       tickPadding: 5,
       tickRotation: 0,
-      legend: 'Time',
-      legendOffset: 36,
+      legend: 'الزمن',
       legendPosition: 'middle',
+      legendOffset: 32,
       truncateTickAt: 0
     }}
     axisLeft={{
       tickSize: 5,
       tickPadding: 5,
       tickRotation: 0,
-      legend: 'Total Order Values',
-      legendOffset: -40,
+      legend: 'العمولة',
       legendPosition: 'middle',
+      legendOffset: -40,
       truncateTickAt: 0
     }}
-    pointSize={10}
-    pointColor={{ theme: 'background' }}
-    pointBorderWidth={2}
-    pointBorderColor={{ from: 'serieColor' }}
-    pointLabel="data.yFormatted"
-    pointLabelYOffset={-12}
-    enableTouchCrosshair={true}
-    useMesh={true}
+    labelSkipWidth={12}
+    labelSkipHeight={12}
+    labelTextColor={{
+      from: 'color',
+      modifiers: [
+        [
+          'darker',
+          1.6
+        ]
+      ]
+    }}
     legends={[
       {
+        dataFrom: 'keys',
         anchor: 'bottom-right',
         direction: 'column',
         justify: false,
-        translateX: 100,
+        translateX: 120,
         translateY: 0,
-        itemsSpacing: 0,
-        itemDirection: 'left-to-right',
-        itemWidth: 80,
+        itemsSpacing: 2,
+        itemWidth: 100,
         itemHeight: 20,
-        itemOpacity: 0.75,
-        symbolSize: 12,
-        symbolShape: 'circle',
-        symbolBorderColor: 'rgba(0, 0, 0, .5)',
+        itemDirection: 'left-to-right',
+        itemOpacity: 0.85,
+        symbolSize: 20,
         effects: [
           {
             on: 'hover',
             style: {
-              itemBackground: 'rgba(0, 0, 0, .03)',
               itemOpacity: 1
             }
           }
         ]
       }
     ]}
+    role="application"
+    ariaLabel="Nivo bar chart demo"
+    barAriaLabel={e => e.id + ": " + e.formattedValue + " in country: " + e.indexValue}
   />
 )
-

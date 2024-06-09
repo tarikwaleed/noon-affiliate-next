@@ -8,21 +8,30 @@ export interface Coupon {
     created_at: Date
     user_id: string
 }
-interface DataPoint {
-    x: string;
-    y: number;
+export interface Order {
+    order_date: string;
+    advertiser: string;
+    country: string;
+    coupon_code: string;
+    total_orders: number;
+    non_payable_orders: number;
+    total_order_value: string;
+    ftu_orders: number;
+    ftu_order_values: string;
+    rtu_orders: number;
+    rtu_order_value: string;
+    platform: string;
 }
 
-export interface PerformanceData {
-    id: string|number;
-    color: string;
-    data: DataPoint[];
-}
 
 export interface CouponDetails {
     num_total_orders: number;
     total_order_value: number;
     average_order_value: number;
-    performance_data: PerformanceData[];
-    commission:number
+    total_commission: number
+    commission_stats: {
+        month: string,
+        value: number
+    }[]
+
 }

@@ -66,8 +66,8 @@ const page = () => {
                         {
                             hasCoupon ?
                                 <>
-                                    <div >
-                                        <span className='text-4xl font-bold'>Your Coupon</span>
+                                    <div dir='rtl'>
+                                        <span className='text-4xl font-bold'>الكوبون الخاص بك</span>
                                     </div>
                                     <div className="pb-20"></div>
                                     <div className='flex flex-row justify-center'>
