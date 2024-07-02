@@ -7,7 +7,7 @@ import { CouponCard } from '@/components/coupon-card';
 import Confetti from 'react-confetti'
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-const page = () => {
+const UserDashboard = () => {
     const { user } = useUser();
     const [coupon, setCoupon] = useState<Coupon | null>(null)
     const [hasCoupon, setHasCoupon] = useState<boolean>(false)
@@ -106,5 +106,4 @@ const page = () => {
 
     )
 }
-
-export default page
+export default UserDashboard
