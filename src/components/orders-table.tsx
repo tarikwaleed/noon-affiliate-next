@@ -57,12 +57,11 @@ export function OrdersTable({ couponCode }: { couponCode: string }) {
         <>
             <Table>
                 <TableCaption>تفاصيل العمولات</TableCaption>
-                <TableHeader>
+                <TableHeader >
                     <TableRow>
                         <TableHead >تاريخ الطلب</TableHead>
                         <TableHead>إجمالي الطلبيات</TableHead>
                         <TableHead>قيمة الطلب الإجمالية</TableHead>
-                        <TableHead>منصة</TableHead>
                         {/* <TableHead>المعلن</TableHead> */}
                         {/* <TableHead>البلد</TableHead> */}
                         {/* <TableHead>رمز القسيمة</TableHead> */}
@@ -80,7 +79,6 @@ export function OrdersTable({ couponCode }: { couponCode: string }) {
                             <TableCell className="font-medium">{order.order_date}</TableCell>
                             <TableCell>{order.total_orders}</TableCell>
                             <TableCell>{order.total_order_value}</TableCell>
-                            <TableCell >{order.platform}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
