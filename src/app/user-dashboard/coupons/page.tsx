@@ -56,8 +56,10 @@ const UserDashboard = () => {
   // }, [user]);
 
   useEffect(() => {
-    userHasCoupon();
-  }, []);
+    if (user) {
+      userHasCoupon();
+    }
+  }, [user]);
   const celebrate = () => {
     setShowConfetti(true);
     setTimeout(() => {
