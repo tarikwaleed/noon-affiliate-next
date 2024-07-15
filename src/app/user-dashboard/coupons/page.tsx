@@ -56,6 +56,9 @@ const UserDashboard = () => {
   // }, [user]);
 
   useEffect(() => {
+    userHasCoupon();
+  }, []);
+useEffect(() => {
     if (user) {
       userHasCoupon();
     }
@@ -82,7 +85,7 @@ const UserDashboard = () => {
           <>
             {hasCoupon ? (
               <>
-                <div dir="rtl">
+                <div className="flex flex-row justify-center" dir="rtl">
                   <span className="text-4xl font-bold">الكوبون الخاص بك</span>
                 </div>
                 <div className="pb-20"></div>
