@@ -2,16 +2,23 @@
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
-import { Coupon } from "@/lib/types";
 import { CouponCard } from "@/components/coupon-card";
 import Confetti from "react-confetti";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { useCouponStore } from "@/stores/useCouponStore";
 
 const UserDashboard = () => {
   const { user } = useUser();
-  const [coupon, setCoupon] = useState<Coupon | null>(null);
-  const [hasCoupon, setHasCoupon] = useState<boolean>(false);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
+  const { coupon, hasCoupon, setCoupon, setHasCoupon } = useCouponStore(
+    (state) => ({
+      coupon: state.coupon,
+      hasCoupon: state.hasCoupon,
+      setCoupon: state.setCoupon,
+      setHasCoupon: state.setHasCoupon,
+    }),
+  );
+
   const getCoupon = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/coupon?user_id=${user?.id}`,
@@ -20,15 +27,16 @@ const UserDashboard = () => {
     console.log(json);
     // new coupon assigned to user
     if (res.status == 201) {
-      setHasCoupon(false);
+      setHasCoupon(true);
       setCoupon(json);
       celebrate();
     }
     // user already has coupon
-    if (res.status == 200) {
-      setHasCoupon(true);
-    }
+    // if (res.status == 200) {
+    //   setHasCoupon(true);
+    // }
   };
+
   const userHasCoupon = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/coupon/has?user_id=${user?.id}`,
@@ -43,14 +51,13 @@ const UserDashboard = () => {
       setHasCoupon(false);
     }
   };
-  useEffect(() => {
-    if (user?.id) userHasCoupon();
-  }, [user]);
+  // useEffect(() => {
+  //   if (user?.id) userHasCoupon();
+  // }, [user]);
 
   useEffect(() => {
-    console.log("reloaded");
-  }, [hasCoupon]);
-
+    userHasCoupon();
+  }, []);
   const celebrate = () => {
     setShowConfetti(true);
     setTimeout(() => {
@@ -90,7 +97,7 @@ const UserDashboard = () => {
                     }}
                     className="text-xl"
                   >
-                    {hasCoupon?<span>show</span>:<span>get</span>}
+                    احصل على كوبون جديد
                   </Button>
                 </div>
               </>
