@@ -30,7 +30,7 @@ export default function RootLayout({
         fontSans.className
       )}>
         <PrimeReactProvider>
-          <ClerkProvider >
+          <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
             <ConvexClientProvider>
               {children}
             </ConvexClientProvider>
