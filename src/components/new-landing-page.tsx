@@ -1,10 +1,12 @@
+"use client"
 import { Button } from "@/components/ui/button";
-import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import Link from "next/link";
-import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, SignedIn, SignedOut} from "@clerk/nextjs";
+
+import { useUser } from "@clerk/clerk-react";
 
 export function LandingPage() {
+  const { user } = useUser();
   return (
     <>
       <section className="h-screen flex flex-col lg:flex-row">
@@ -51,16 +53,17 @@ export function LandingPage() {
 
         {/* Right column container */}
         <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-          <SignedOut>
+          {!user ? (
             <SignIn />
-          </SignedOut>
-          <SignedIn>
-            <Link href="/user-dashboard/coupons">
-              <Button className="bg-blue-500 text-white rounded-md px-6 py-2 hover:bg-gray-700 transition-colors duration-200">
-                لوحة التحكم
-              </Button>
-            </Link>
-          </SignedIn>
+          ) : (
+            <>
+              <Link href="/user-dashboard/coupons">
+                <Button className="bg-blue-500 text-white rounded-md px-6 py-2 hover:bg-gray-700 transition-colors duration-200">
+                  لوحة التحكم
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </section>
     </>
