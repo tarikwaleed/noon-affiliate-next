@@ -12,7 +12,7 @@ module.exports = {
       path: '/root',
       'pre-deploy-local': '',
       "post-deploy":
-        "source ~/.nvm/nvm.sh && npm install && npm run build && pm2 reload ecosystem.config.js --env production",
+        "source ~/.nvm/nvm.sh && npm install && npm run build && pm2 reload ecosystem.config.js --env local",
       'pre-setup': ''
     }
   }
